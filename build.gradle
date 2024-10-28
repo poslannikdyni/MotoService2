@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'war'
+//    id "io.freefair.lombok" version "8.10.2"
+}
+
+group = 'ru.clevertec'
+version = '1.0-SNAPSHOT'
+description = 'moto-service'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.11.0'
+    implementation 'com.google.code.gson:gson:2.10'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java{
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+sourceSets {
+    main{
+        resources.srcDir('src/main/resource')
+    }
+    test{
+        java.srcDir('src/main/test')
+        resources.srcDir('src/main/test_resource')
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true'
+    ]
+}
+
+war {
+    archiveFileName = 'app.war'
+}
